@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scoped CSS Variables and JS</title>
+</head>
+<body>
+  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+
+  <div class="controls">
+    <label for="spacing">Spacing:</label>
+    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+
+    <label for="blur">Blur:</label>
+    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+
+    <label for="base">Base Color</label>
+    <input id="base" type="color" name="base" value="#ffc600">
+  </div>
+
+  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+
+  <style>
+    :root {
+      --base: #ffc600;
+      --spacing: 10px;
+      --blur: 10px;
+    }
+
+    img{
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .h1 {
+      color: var(--base);
+    }
+
+    /*
+      misc styles, nothing to do with CSS variables
+    */
+
+    body {
+      text-align: center;
+    }
+
+    body {
+      background: #193549;
+      color: white;
+      font-family: 'helvetica neue', sans-serif;
+      font-weight: 100;
+      font-size: 50px;
+    }
+
+    .controls {
+      margin-bottom: 50px;
+    }
+
+    input {
+      width:100px;
+    }
+  </style>
+
+  <script>
+  // .controls input is for all the inputs on the page. 
+  // .querySelector gives you not an array, but a node list - go look at it in the console. The node list doesn't have the same methods you can use on arrays, so you only have a couple here. Sometimes people purposefully change their node list to an array
+  // we're going to use the "for each " method which has just been added to the array
+    const inputs = document.querySelectorAll('.controls input');
+
+    function handleUpdate() {
+      // the dataset is an object that will contain all of the attributes on that specific element. You don't have to select it, it will just take everything that has a "data-" and put it into a nice little object for you.
+      // if we don't put || '' meaning and nothing, it will append undefined on the end and we don't want that
+      const suffix = this.dataset.sizing || '';
+      // updatethe actual variables, select the entire root document and 
+      console.log(this.name);
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+// WHEN you use a CSS variable you can then update that variable on any element and any selectors on that variable will be using it. You can also use the variables on just a div - also the win is the same as the CSS cascade\
+
+    }
+
+    inputs.forEach(input => input.addEventListener('change', handleUpdate));
+    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
+
+
+
+  </script>
+
+</body>
+</html>
